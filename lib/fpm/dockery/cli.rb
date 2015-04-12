@@ -8,10 +8,13 @@ module FPM
         include Logging
         include Utils
         
+        # List all valid builders by listing the Dockerfile.* files in
+        # the docker directory.
         def valid_builders
           Dir.glob("#{FPM::Dockery.root}/docker/Dockerfile.*").map {|f| File.basename(f.gsub('Dockerfile.', ''))}
         end
         
+        # Check the builder is one we have a Dockerfile for.
         def validate_builder!
           unless valid_builders.include?(builder)
             fatal "Image type must be one of: #{valid_builders.join(', ')}"
@@ -19,6 +22,7 @@ module FPM
           end
         end
         
+        # Create a builder image if it doesn't exist.
         def create_builder_if_required
           image_check = Subprocess.run("docker images | awk '{print $1}' | grep fpm-dockery/#{builder}")
           unless image_check.exitstatus == 0
@@ -27,6 +31,7 @@ module FPM
           end
         end
         
+        # Create a builder image.
         def create_builder(no_cache)
           validate_builder!
           cache_option = no_cache ? '--no-cache=true' : ''
@@ -55,11 +60,13 @@ module FPM
           create_builder(no_cache?)
         end
       end
-    
+      
+      # The package command implementation.
       class PackageCommand < BaseCommand
         parameter "RECIPE", "fpm-cookery recipe to build"
         parameter "BUILDER", "Builder to use"
         parameter "[PACKAGE_DIR]", "Where to place the packages created by the build (defaults to /pkg in same dir as recipe)"
+        option "--skip-package", :flag, "Skip package building (identical to fpm-cook --skip-package)"
         
         def execute
           recipe_path = File.expand_path(recipe)
@@ -69,23 +76,30 @@ module FPM
           validate_builder!
           create_builder_if_required
           
-          extra_command = ''
+          extra_docker_commands = []
+          extra_fpm_cook_commands = []
+          
           pkg_dir = "/recipe/pkg"
           
           if package_dir
-            extra_command = "-v #{File.expand_path(package_dir)}:/output"
+            extra_docker_commands << "-v #{File.expand_path(package_dir)}:/output"
             pkg_dir = "/output"
+          end
+          
+          if skip_package?
+            extra_fpm_cook_commands << "--skip-package"
           end
             
           command = <<eos
 docker run \
 -v #{dir_to_mount}:/recipe \
-#{extra_command} \
+#{extra_docker_commands.join(' ')} \
 fpm-dockery/ubuntu \
 --tmp-root /tmp/tmproot \
 --pkg-dir #{pkg_dir} \
 --cache-dir /tmp/cache \
 package \
+#{extra_fpm_cook_commands.join(' ')} \
 /recipe/#{name_of_recipe}
 eos
           exit_status = Subprocess.run(command)
