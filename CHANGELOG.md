@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.4
+
+* Unbreak building on platforms that aren't 'ubuntu'.
+
 ## 0.1.3
 
 * Unbreak fpm-dockery binary.

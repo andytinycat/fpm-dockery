@@ -94,7 +94,7 @@ module FPM
 docker run \
 -v #{dir_to_mount}:/recipe \
 #{extra_docker_commands.join(' ')} \
-fpm-dockery/ubuntu \
+fpm-dockery/#{builder} \
 --tmp-root /tmp/tmproot \
 --pkg-dir #{pkg_dir} \
 --cache-dir /tmp/cache \
