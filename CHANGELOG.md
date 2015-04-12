@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.3
+
+* Unbreak fpm-dockery binary.
+
 ## 0.1.2
 
 * binfiles not properly marked as such in the gemspec.
