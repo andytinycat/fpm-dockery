@@ -1,0 +1,25 @@
+FROM ubuntu:12.04
+
+RUN apt-get update
+
+# Additional tooling
+RUN apt-get install -y git
+RUN apt-get install -y curl
+RUN apt-get install -y mercurial
+RUN apt-get install -y subversion
+
+# Build tools
+RUN apt-get install -y build-essential
+
+# Install Ruby from Brightbox's PPA
+RUN apt-get -y install python-software-properties
+RUN apt-add-repository ppa:brightbox/ruby-ng
+RUN apt-get update
+RUN apt-get -y install ruby2.1
+RUN apt-get -y install ruby2.1-dev
+
+# Install fpm-cookery
+RUN gem install fpm-cookery -v 0.27.0
+
+# Set an entry point to simplify command execution
+ENTRYPOINT ["/usr/local/bin/fpm-cook"]
