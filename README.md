@@ -47,6 +47,8 @@ ensure packages are placed in the correct location.
 
 The following limitations are imposed on recipes you use with `fpm-dockery`:
 
+  * Docker 1.5 or later is required, as we make use of the `-f` flag with
+    `docker build`.
   * If a recipe includes external files, these files must be in the same directory
     as the recipe file, or any number of subdirectories below where the recipe file is located.
     This is because the directory containing the recipe is mounted inside the Docker container
