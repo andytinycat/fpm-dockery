@@ -88,7 +88,17 @@ module FPM
           end
           
           if private_key
-            extra_docker_commands << "-v #{File.expand_path(private_key)}:/root/.ssh/id_rsa"
+            begin
+              key = IO.read(File.expand_path(private_key))
+              if key.include?('ENCRYPTED')
+                fatal 'Provided private key has a passphrase ' + private_key
+                exit 1
+              end
+              extra_docker_commands << "-v #{File.expand_path(private_key)}:/root/.ssh/id_rsa"
+            rescue Errno::ENOENT
+              fatal 'Provided private key does not exist ' + private_key
+              exit 1
+            end
           end
           
           if skip_package?
