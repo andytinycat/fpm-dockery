@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.5
+
+* Update Rubygems when building the builder images. [@lloydpick](https://github.com/lloydpick)
+* Allow specifying a private SSH key (with `--private-key`) when packaging, in order to support
+  recipes that require cloning a private repository.
+
 ## 0.1.4
 
 * Unbreak building on platforms that aren't 'ubuntu'.

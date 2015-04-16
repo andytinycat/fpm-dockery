@@ -67,6 +67,7 @@ module FPM
         parameter "BUILDER", "Builder to use"
         parameter "[PACKAGE_DIR]", "Where to place the packages created by the build (defaults to /pkg in same dir as recipe)"
         option "--skip-package", :flag, "Skip package building (identical to fpm-cook --skip-package)"
+        option "--private-key", "PRIVATE_KEY", "Private key to use with SSH (for example, when cloning private Git repositories)"
         
         def execute
           recipe_path = File.expand_path(recipe)
@@ -84,6 +85,10 @@ module FPM
           if package_dir
             extra_docker_commands << "-v #{File.expand_path(package_dir)}:/output"
             pkg_dir = "/output"
+          end
+          
+          if private_key
+            extra_docker_commands << "-v #{File.expand_path(private_key)}:/root/.ssh/id_rsa"
           end
           
           if skip_package?

@@ -103,6 +103,16 @@ argument `PACKAGE_DIR`:
 
     fpm-dockery package example_recipe/recipe.rb ubuntu12.04 /tmp/somedir
 
+If you're building a package from git source, and you're using a private repository 
+(on GitHub or BitBucket or wherever), you can supply an SSH private key to build with.
+The private key __must have no passphrase__. For reasons of security, it would be wise
+to create a keypair just for your package builds, and give it only read access to the repository.
+
+    fpm-dockery package --private-key some/path/builder-private-key example_recipe/recipe.rb ubuntu12.04
+
+If you'd like to make fpm-cookery skip the packaging step, supply the `--skip-package` option:
+
+    fpm-dockery package --skip-package example_recipe/recipe.rb ubuntu12.04
 
 ### Viewing available builders
 
