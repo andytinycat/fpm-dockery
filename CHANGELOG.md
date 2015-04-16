@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.6
+
+* Check private key exists and does not have a passphrase. [@lloydpick](https://github.com/lloydpick)
+
 ## 0.1.5
 
 * Update Rubygems when building the builder images. [@lloydpick](https://github.com/lloydpick)
