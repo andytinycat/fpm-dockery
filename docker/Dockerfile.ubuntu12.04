@@ -18,6 +18,10 @@ RUN apt-get update
 RUN apt-get -y install ruby2.1
 RUN apt-get -y install ruby2.1-dev
 
+# Update rubygems and don't install docs
+RUN gem update --system --verbose
+RUN echo "gem: --no-document" >> ~/.gemrc
+
 # Install fpm-cookery
 RUN gem install fpm-cookery -v 0.27.0
 
