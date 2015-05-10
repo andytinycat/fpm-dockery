@@ -110,6 +110,10 @@ to create a keypair just for your package builds, and give it only read access t
 
     fpm-dockery package --private-key some/path/builder-private-key example_recipe/recipe.rb ubuntu12.04
 
+If you're working with large source files and don't want to re-download the source each time you can specify a local cache directory which fpm-cookery will use.
+
+    fpm-dockery package --local-cache-dir some/path example_recipe/recipe.rb ubuntu12.04
+
 If you'd like to make fpm-cookery skip the packaging step, supply the `--skip-package` option:
 
     fpm-dockery package --skip-package example_recipe/recipe.rb ubuntu12.04

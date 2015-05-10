@@ -68,7 +68,8 @@ module FPM
         parameter "[PACKAGE_DIR]", "Where to place the packages created by the build (defaults to /pkg in same dir as recipe)"
         option "--skip-package", :flag, "Skip package building (identical to fpm-cook --skip-package)"
         option "--private-key", "PRIVATE_KEY", "Private key to use with SSH (for example, when cloning private Git repositories)"
-        
+        option "--local-cache-dir", "DIR", "Local cache directory to use (useful if you are working with large source files)"
+
         def execute
           recipe_path = File.expand_path(recipe)
           dir_to_mount = File.dirname(recipe_path)
@@ -100,7 +101,11 @@ module FPM
               exit 1
             end
           end
-          
+
+          if local_cache_dir
+            extra_docker_commands << "-v #{File.expand_path(local_cache_dir)}:/tmp/cache"
+          end
+
           if skip_package?
             extra_fpm_cook_commands << "--skip-package"
           end
