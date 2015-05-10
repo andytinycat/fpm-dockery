@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.7
+
+* Add the ability to have a local cache dir. [@lloydpick](https://github.com/lloydpick)
+* Unzip is required by fpm-cookery for zip sources. [@lloydpick](https://github.com/lloydpick)
+
 ## 0.1.6
 
 * Check private key exists and does not have a passphrase. [@lloydpick](https://github.com/lloydpick)
