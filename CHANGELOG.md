@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.8
+
+* Added support for supplying extra Docker parameters to the build with `--docker-params`. [@randomvariable](https://github.com/randomvariable)
+* Added support for Centos 6, Centos 7, Ubuntu 15.04. [@randomvariable](https://github.com/randomvariable)
+
 ## 0.1.7
 
 * Add the ability to have a local cache dir. [@lloydpick](https://github.com/lloydpick)
