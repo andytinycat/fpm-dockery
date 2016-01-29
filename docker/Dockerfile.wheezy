@@ -1,0 +1,43 @@
+FROM debian:wheezy
+
+MAINTAINER Javier Juarez "javier.juarez@gmail.com"
+
+RUN apt-get -qq update
+RUN apt-get -qqy install \
+  git \
+  curl \
+  python-software-properties \
+  libssl-dev \
+  libreadline-dev \
+  zlib1g-dev \
+  ruby \
+  ruby-dev \
+  build-essential
+
+# rbenv installation
+RUN git clone https://github.com/sstephenson/rbenv.git /opt/rbenv
+
+RUN echo 'export RBENV_ROOT=/opt/rbenv' >> /etc/profile.d/rbenv.sh
+RUN echo 'export PATH="$RBENV_ROOT/bin:$PATH"' >> /etc/profile.d/rbenv.sh
+RUN echo 'eval "$(rbenv init -)"' >> /etc/profile.d/rbenv.sh
+RUN chmod +x /etc/profile.d/rbenv.sh
+
+# install ruby-build
+RUN mkdir /opt/rbenv/plugins
+RUN git clone https://github.com/sstephenson/ruby-build.git /opt/rbenv/plugins/ruby-build
+
+ENV RBENV_ROOT /opt/rbenv
+ENV PATH $RBENV_ROOT/bin:$RBENV_ROOT/shims:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+RUN rbenv install -k 2.1.5
+RUN rbenv rehash
+RUN rbenv global 2.1.5
+RUN echo "gem: --no-document" >> /root/.gemrc
+RUN gem update --system 
+RUN gem install --no-document fpm-cookery --version 0.31.0
+
+# Remove strict host key checking for SSH
+RUN echo 'StrictHostKeyChecking no' >> /etc/ssh/ssh_config
+
+# Set an entry point to simplify command execution
+ENTRYPOINT ["/usr/local/bin/fpm-cook"]
