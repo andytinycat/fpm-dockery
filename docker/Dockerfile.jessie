@@ -1,0 +1,45 @@
+FROM debian:jessie
+
+MAINTAINER Javier Juarez "javier.juarez@gmail.com"
+
+RUN apt-get -qq update
+RUN apt-get -qqy install \
+  git \
+  curl \
+  build-essential \
+  python-software-properties \
+  libssl-dev \
+  libreadline-dev \
+  zlib1g-dev \
+  ruby \
+  ruby-dev
+
+# rbenv installation
+RUN git clone https://github.com/sstephenson/rbenv.git /opt/rbenv
+
+RUN echo 'export RBENV_ROOT=/opt/rbenv' >> /etc/profile.d/rbenv.sh
+RUN echo 'export PATH="${RBENV_ROOT}/bin:${PATH}"' >> /etc/profile.d/rbenv.sh
+RUN echo 'eval "$(rbenv init -)"' >> /etc/profile.d/rbenv.sh
+RUN chmod +x /etc/profile.d/rbenv.sh
+
+# Environment
+ENV RBENV_ROOT /opt/rbenv
+ENV PATH ${RBENV_ROOT}/bin:${RBENV_ROOT}/shims:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+ENV RUBY_VERSION="2.1.8"
+ENV FPMDOCKERY_VERSION="0.31.0"
+
+# install ruby-build
+RUN mkdir /opt/rbenv/plugins
+RUN git clone https://github.com/sstephenson/ruby-build.git /opt/rbenv/plugins/ruby-build
+
+
+RUN rbenv install -k ${RUBY_VERSION}
+RUN rbenv rehash
+RUN rbenv global ${RUBY_VERSION}
+RUN echo "gem: --no-document" >> /root/.gemrc
+RUN gem update -q --system 
+RUN gem install --no-document fpm-cookery --version ${FPMDOCKERY_VERSION}
+
+RUN echo 'StrictHostKeyChecking no' >> /etc/ssh/ssh_config
+
+ENTRYPOINT ["/usr/local/bin/fpm-cook"]
