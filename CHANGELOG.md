@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.9
+
+* Links in the README fixed [@fkr](https://github.com/fkr)
+* Updated fpm-cookery to v0.31.0 inside the build containers [@lloydpick](https://github.com/lloydpick)
+
 ## 0.1.8
 
 * Added support for supplying extra Docker parameters to the build with `--docker-params`. [@randomvariable](https://github.com/randomvariable)
