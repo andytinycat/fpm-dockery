@@ -1,10 +1,10 @@
 # fpm-dockery
 
-Build [fpm-cookery](https://github.com/forward3d/fpm-cookery) recipes with Docker!
+Build [fpm-cookery](https://github.com/bernd/fpm-cookery) recipes with Docker!
 
 ## What is this?
 
-This is a terribly-named wrapper around [fpm-cookery](https://github.com/forward3d/fpm-cookery)
+This is a terribly-named wrapper around [fpm-cookery](https://github.com/bernd/fpm-cookery)
 that allows you to run fpm-cookery builds inside a container. I wrote this to allow me to run package builds
 in development on my laptop in the same way that Jenkins runs them, and to allow easy building of packages
 for a variety of Linux distributions.
