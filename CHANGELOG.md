@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.10
+
+* Added support for Ubuntu 16.04 LTS [@lloydpick](https://github.com/lloydpick)
+
 ## 0.1.9
 
 * Links in the README fixed [@fkr](https://github.com/fkr)
