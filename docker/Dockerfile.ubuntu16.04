@@ -19,7 +19,7 @@ RUN gem2.3 update --system --verbose
 RUN echo "gem: --no-document" >> ~/.gemrc
 
 # Install fpm-cookery
-RUN gem2.3 install fpm-cookery -v 0.31.0
+RUN gem2.3 install fpm-cookery -v 0.32.0
 
 # Remove strict host key checking for SSH
 RUN echo 'StrictHostKeyChecking no' >> /etc/ssh/ssh_config
