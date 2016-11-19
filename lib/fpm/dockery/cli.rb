@@ -27,15 +27,15 @@ module FPM
           image_check = Subprocess.run("docker images | awk '{print $1}' | grep fpm-dockery/#{builder}")
           unless image_check.exitstatus == 0
             warn "The builder image '#{builder}' does not exist; running the image creation for you"
-            create_builder(false)
+            create_builder(false, [])
           end
         end
 
         # Create a builder image.
-        def create_builder(no_cache)
+        def create_builder(no_cache, extra_docker_commands)
           validate_builder!
           cache_option = no_cache ? '--no-cache=true' : ''
-          exit_status = Subprocess.run("docker build #{cache_option} -f #{FPM::Dockery.root}/docker/Dockerfile.#{builder} -t fpm-dockery/#{builder} #{FPM::Dockery.root}")
+          exit_status = Subprocess.run("docker build --pull #{extra_docker_commands.join(' ')} #{cache_option} -f #{FPM::Dockery.root}/docker/Dockerfile.#{builder} -t fpm-dockery/#{builder} #{FPM::Dockery.root}")
           if exit_status.exitstatus == 0
             info "Build complete"
           else
@@ -55,9 +55,13 @@ module FPM
       class CreateBuilderImage < BaseCommand
         parameter "BUILDER", "Type of builder image to build"
         option "--no-cache", :flag, "Build without cache"
+        option "--docker-params", "DOCKER_PARAMS", "Extra Docker build parameters"
 
         def execute
-          create_builder(no_cache?)
+          extra_docker_commands = []
+          extra_docker_commands << docker_params if docker_params
+
+          create_builder(no_cache?, extra_docker_commands)
         end
       end
 
